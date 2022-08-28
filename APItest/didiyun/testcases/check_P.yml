@@ -1,0 +1,67 @@
+config:
+    name: testcase description
+    variables:
+        coo_K: ${ENV(coo)}
+        Tok_e: ${ENV(tok)}
+teststeps:
+-   name: /dicloud/wallet/v4/checkPrice
+    request:
+        headers:
+            Content-Type: application/json;charset=UTF-8
+            Dicloud-Header-App: iaas
+            Dicloud-Header-Console-Version: '2'
+            Dicloud-Header-Csrf-Token: $Tok_e
+            Dicloud-Header-Nonce: BmeDTcvOVwRJOOEd_JY_-y63gQo:1661525213822
+            Cookie: $coo_K
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-site
+            User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+            sec-ch-ua: '"Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+        json:
+            goods:
+                autoContinue: false
+                couponId: CHECKCOUPON
+                offerings:
+                -   cnt: 1
+                    elements:
+                    -   cnt: 1
+                        customDetail:
+                            ebs.name: EBS_HE_01
+                            ebs.type: Root
+                        factorValues:
+                            ebs.size: 40
+                            period: 1
+                        offeringUuid: d10c319c66c10b780b9d299488ad45ed
+                        payType: prePaid
+                        product: ebs
+                        regionId: gz
+                        zoneId: gz02
+                    factorValues:
+                        period: 1
+                    offeringUuid: b9bb78ab2ec6408f8dcc73dc2b5dd54d
+                    payType: prePaid
+                    product: dc2
+                    regionId: gz
+                    zoneId: gz02
+                orderScene: scene_create
+        method: POST
+        url: https://api.didiyun.com/dicloud/wallet/v4/checkPrice
+    validate:
+    -  eq:
+        - content.data.priceInfo.resultPrices.0.price
+#["data"]["priceInfo"]["resultPrices"][0]["price"]
+#data[0].[0].price
+        - 1980
+    -  gt:
+       - content.data.priceInfo.resultPrices.0.price
+       - 1981
+#
+    -  gt: #实际结果大于等于期望结果
+       - content.data.priceInfo.resultPrices.0.price #1980
+       - 1981
+
+

@@ -1,0 +1,40 @@
+config:
+    name: testcase description
+    variables: {}
+teststeps:
+-   name: /dicloud/i/compute/dc2/stop
+    request:
+        headers:
+            Content-Type: application/json;charset=UTF-8
+            Dicloud-Header-App: iaas
+            Dicloud-Header-Console-Version: '2'
+            Dicloud-Header-Csrf-Token: eVVre4h-BbWTb82mrCq9bIxbKc4:1661527159997
+            Dicloud-Header-Nonce: mEqotDLCltynQX_pfyRKzESvOpD:1661531821420
+            Dicloud-Header-Regionid: gz
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-site
+            User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+            sec-ch-ua: '"Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+        json:
+            dc2:
+            -   dc2Uuid: 2978abf6a44952abb15a8b70fd191092
+                type: grace
+        method: POST
+        url: https://api.didiyun.com/dicloud/i/compute/dc2/stop
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - headers.Content-Type
+        - application/json; charset=utf-8
+    -   eq:
+        - content.errno
+        - 0
+    -   eq:
+        - content.errmsg
+        - ok

@@ -1,0 +1,40 @@
+config:
+    name: DC2list接口  #接口名称 可修改
+    variables: ## 变量
+      c: ${ENV(coo)}
+      k: ${ENV(tok)}
+teststeps: #测试步骤(指的是每一条接口测试用例)
+-   name: /dicloud/i/compute/dc2/list  #接口名称
+    request: #请求信息
+        headers: #请求头
+            Content-Type: application/json;charset=UTF-8
+            Dicloud-Header-App: iaas
+            Dicloud-Header-Console-Version: '2'
+            Dicloud-Header-Csrf-Token: $k
+            Dicloud-Header-Nonce: dCoR0fQQTU9e_cfTZQ2FTYi6FFA:1661523310168
+            Cookie: $c
+        json: #请求参数
+            condition: {}
+            limit: 10
+            simplify: false
+            start: 0
+        method: POST #请求方法
+        url: https://api.didiyun.com/dicloud/i/compute/dc2/list #请求URL
+    validate: #断言 可以添加多条断言
+    -   eq:
+        - status_code #key
+        - 200 #预期结果
+    -   eq:
+        - headers.Content-Type
+        - application/json; charset=utf-8
+    -   eq:
+        - content.errno
+        - 0
+    -   eq:
+        - content.errmsg
+        - ok
+    -   eq:
+        - content.data.0.dc2Uuid  #postman .data[0].dc2Uuid  requests ["data"][0]["dc2Uuid"]
+        - 2978abf6a44952abb15a8b70fd191092
+
+

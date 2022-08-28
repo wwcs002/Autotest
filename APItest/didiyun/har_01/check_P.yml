@@ -1,0 +1,75 @@
+config:
+    name: testcase description
+    variables: {}
+teststeps:
+-   name: /dicloud/wallet/v4/checkPrice
+    request:
+        headers:
+            Content-Type: application/json;charset=UTF-8
+            Dicloud-Header-App: iaas
+            Dicloud-Header-Console-Version: '2'
+            Dicloud-Header-Csrf-Token: W4HbULo2-hM3FqXfTUL04VLMWxo:1661523307470
+            Dicloud-Header-Nonce: BmeDTcvOVwRJOOEd_JY_-y63gQo:1661525213822
+            Cookie: u_name=186*****374; q=89U55GCZqAkT-8sY47vXnjppmF04L3Bm4MwVm-9wuYMkzDuOwkAMgOG7_LUV2eOZieN2-73DLoRHM0ggqih3R8AFvo2hJD7ppAjDSBNGIX1Ra8JwUoVRSeu9WAnTLoxG8vOL8EeC8E_GXN2L9rZEWYqqcCS9hrCSG4_b835YybYLp49mrbi_tTOJRVePOXyuCJeveiV1fwUAAP__; feq=1; Hm_lvt_9eaa41ddde51c419f3c8953af0161d25=1660919456,1661011426,1661437752,1661523312; Hm_lpvt_9eaa41ddde51c419f3c8953af0161d25=1661523312
+
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-site
+            User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+            sec-ch-ua: '"Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+        json:
+            goods:
+                autoContinue: false
+                couponId: CHECKCOUPON
+                offerings:
+                -   cnt: 1
+                    elements:
+                    -   cnt: 1
+                        customDetail:
+                            ebs.name: EBS_HE_01
+                            ebs.type: Root
+                        factorValues:
+                            ebs.size: 40
+                            period: 1
+                        offeringUuid: d10c319c66c10b780b9d299488ad45ed
+                        payType: prePaid
+                        product: ebs
+                        regionId: gz
+                        zoneId: gz02
+                    factorValues:
+                        period: 1
+                    offeringUuid: b9bb78ab2ec6408f8dcc73dc2b5dd54d
+                    payType: prePaid
+                    product: dc2
+                    regionId: gz
+                    zoneId: gz02
+                orderScene: scene_create
+        method: POST
+        url: https://api.didiyun.com/dicloud/wallet/v4/checkPrice
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - headers.Content-Type
+        - application/json; charset=utf-8
+    -   eq:
+        - content.errno
+        - 0
+    -   eq:
+        - content.errmsg
+        - ok
+
+    -    eq:
+        - content.data.1.subPrice
+        - 1980
+    -    gt: #实际结果大于 期望结果
+        - content.data.1.subPrice
+        - 1981
+
+    -    gt: #实际结果大于等于期望结果
+        - content.data.1.subPrice
+        - 1981

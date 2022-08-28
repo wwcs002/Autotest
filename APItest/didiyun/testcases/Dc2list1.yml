@@ -1,0 +1,122 @@
+config:
+    name: DC2list接口  #接口名称 可修改##变量
+    variables:
+      coo_a: ${ENV(coo)}
+      token_a: ${ENV(tok)}
+teststeps: #测试步骤(指的是每一条接口测试用例)
+-   name: /dicloud/i/compute/dc2/list  #接口名称
+    request: #请求信息
+        headers: #请求头
+            Content-Type: application/json;charset=UTF-8
+            Dicloud-Header-App: iaas
+            Dicloud-Header-Console-Version: '2'
+            Dicloud-Header-Csrf-Token: $token_a
+            Dicloud-Header-Nonce: dCoR0fQQTU9e_cfTZQ2FTYi6FFA:1661523310168
+            Cookie: $coo_a
+        json: #请求参数
+            condition: {}
+            limit: 10
+            simplify: false
+            start: 0
+        method: POST #请求方法
+        url: https://api.didiyun.com/dicloud/i/compute/dc2/list #请求URL
+    extract:
+      DC2UUid: content.data.0.dc2Uuid
+    validate: #断言 可以添加多条断言
+    -   eq:
+        - status_code #key
+        - 200 #预期结果
+    -   eq:
+        - headers.Content-Type
+        - application/json; charset=utf-8
+    -   eq:
+        - content.errno
+        - 0
+    -   eq:
+        - content.errmsg
+        - ok
+    -   eq:
+        - content.data.0.dc2Uuid  #postman .data[0].dc2Uuid  requests ["data"][0]["dc2Uuid"]
+        - 2978abf6a44952abb15a8b70fd191092
+-   name: /dicloud/i/compute/dc2/stop
+    request:
+        headers:
+            Content-Type: application/json;charset=UTF-8
+            Dicloud-Header-App: iaas
+            Dicloud-Header-Console-Version: '2'
+            Dicloud-Header-Csrf-Token: $token_a
+            Dicloud-Header-Nonce: mEqotDLCltynQX_pfyRKzESvOpD:1661531821420
+            Dicloud-Header-Regionid: gz
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-site
+            User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+            sec-ch-ua: '"Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+        json:
+            dc2:
+            -   dc2Uuid: $DC2UUid
+                type: grace
+        method: POST
+        url: https://api.didiyun.com/dicloud/i/compute/dc2/stop
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - headers.Content-Type
+        - application/json; charset=utf-8
+    -   eq:
+        - content.errno
+        - 0
+    -   eq:
+        - content.errmsg
+        - ok
+    teardown_hooks:
+    - ${sleep(10)}
+
+
+-   name: /dicloud/i/compute/dc2/start
+    request:
+        headers:
+            Content-Type: application/json;charset=UTF-8
+            Dicloud-Header-App: iaas
+            Dicloud-Header-Console-Version: '2'
+            Dicloud-Header-Csrf-Token: $token_a
+            Dicloud-Header-Nonce: S_iuhMEW4ZVK5eWBOcNbY7ZAxA_:1661531883453
+            Dicloud-Header-Regionid: gz
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-site
+            User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+                (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+            sec-ch-ua: '"Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"'
+            sec-ch-ua-mobile: ?0
+            sec-ch-ua-platform: '"Windows"'
+        json:
+            dc2:
+            -   dc2Uuid: $DC2UUid
+        method: POST
+        url: https://api.didiyun.com/dicloud/i/compute/dc2/start
+    validate:
+    -   eq:
+        - status_code
+        - 200
+    -   eq:
+        - headers.Content-Type
+        - application/json; charset=utf-8
+    -   eq:
+        - content.errno
+        - 0
+    -   eq:
+        - content.errmsg
+        - ok
+
+
+
+
+
+
+    
